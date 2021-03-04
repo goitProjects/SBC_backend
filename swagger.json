@@ -11,7 +11,10 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://sbc-backend.herokuapp.com" }],
+  "servers": [
+    { "url": "https://sbc-backend.goit.global" },
+    { "url": "https://sbc-backend.herokuapp.com" }
+  ],
   "tags": [
     {
       "name": "Auth",
