@@ -31,14 +31,6 @@
     {
       "name": "Task",
       "description": "Tasks endpoints"
-    },
-    {
-      "name": "Task",
-      "description": "Tasks endpoints"
-    },
-    {
-      "name": "Gift",
-      "description": "Gifts endpoints"
     }
   ],
   "paths": {
