@@ -9,10 +9,11 @@ import {
   loadTasks,
   changeWastedHours,
   deleteTask,
+  changeTaskFlag
 } from "./task.controller";
 
 const addTaskSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().min(2).max(64).required(),
   hoursPlanned: Joi.number().required().min(1).max(8),
 });
 
@@ -45,7 +46,7 @@ const taskIdSchema = Joi.object({
 });
 
 const taskQuerySchema = Joi.object({
-  search: Joi.string(),
+  search: Joi.string().min(2).max(64),
 });
 
 const taskHoursSchema = Joi.object({
@@ -92,6 +93,12 @@ router.delete(
   tryCatchWrapper(authorize),
   validate(taskIdSchema, "params"),
   tryCatchWrapper(deleteTask)
+);
+router.patch(
+  "/changeStatus/:taskId",
+  tryCatchWrapper(authorize),
+  validate(taskIdSchema, "params"),
+  tryCatchWrapper(changeTaskFlag)
 );
 
 export default router;

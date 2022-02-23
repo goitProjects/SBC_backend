@@ -3,8 +3,7 @@ import { DateTime } from "luxon";
 import {
   IUser,
   ISprintPopulated,
-  IProject,
-  ITask,
+  IProject
 } from "../../helpers/typescript-helpers/interfaces";
 import SprintModel from "../sprint/sprint.model";
 import TaskModel from "./task.model";
@@ -43,6 +42,7 @@ export const addTask = async (req: Request, res: Response) => {
     title,
     hoursPlanned,
     hoursWasted: 0,
+    isDone: false,
     hoursWastedPerDay,
   });
   (sprint as ISprintPopulated).tasks.push(task);
@@ -52,6 +52,7 @@ export const addTask = async (req: Request, res: Response) => {
     hoursPlanned,
     hoursWasted: 0,
     id: task._id,
+    isDone: false,
     hoursWastedPerDay,
   });
 };
@@ -144,3 +145,14 @@ export const deleteTask = async (req: Request, res: Response) => {
   await TaskModel.findByIdAndDelete(taskId);
   return res.status(204).end();
 };
+
+export const changeTaskFlag = async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+  const task = await TaskModel.findById(taskId);
+  if (!task) {
+    return res.status(404).send({ message: "Task not found" });
+  }
+  task.isDone = !task.isDone;
+  task.save();
+  res.status(200).send(task);
+}

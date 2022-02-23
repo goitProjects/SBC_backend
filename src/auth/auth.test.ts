@@ -164,7 +164,7 @@ describe("Auth router test suite", () => {
         expect(
           jwt.verify(
             response.body.accessToken,
-            process.env.JWT_SECRET as string
+            process.env.JWT_ACCESS_SECRET as string
           )
         ).toBeTruthy();
       });
@@ -173,7 +173,7 @@ describe("Auth router test suite", () => {
         expect(
           jwt.verify(
             response.body.refreshToken,
-            process.env.JWT_SECRET as string
+            process.env.JWT_REFRESH_SECRET as string
           )
         ).toBeTruthy();
       });
@@ -240,6 +240,7 @@ describe("Auth router test suite", () => {
                           { currentDay: "2020-12-30", singleHoursWasted: 0 },
                           { currentDay: "2020-12-31", singleHoursWasted: 0 },
                         ],
+                        isDone: false,
                         _id: task.body.id,
                         __v: 0,
                       },
@@ -443,7 +444,7 @@ describe("Auth router test suite", () => {
         expect(
           jwt.verify(
             response.body.newAccessToken,
-            process.env.JWT_SECRET as string
+            process.env.JWT_ACCESS_SECRET as string
           )
         ).toBeTruthy();
       });
@@ -452,7 +453,7 @@ describe("Auth router test suite", () => {
         expect(
           jwt.verify(
             response.body.newRefreshToken,
-            process.env.JWT_SECRET as string
+            process.env.JWT_REFRESH_SECRET as string
           )
         ).toBeTruthy();
       });

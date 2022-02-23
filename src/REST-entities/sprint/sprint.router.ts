@@ -12,7 +12,7 @@ import {
 } from "./sprint.controller";
 
 const addSprintSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().min(2).max(64).required(),
   endDate: Joi.string()
     .custom((value, helpers) => {
       const dateRegex = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
@@ -25,7 +25,7 @@ const addSprintSchema = Joi.object({
       return value;
     })
     .required(),
-  duration: Joi.number().required().min(1),
+  duration: Joi.number().required().min(1).max(100),
 });
 
 export const addSprintIdSchema = Joi.object({
@@ -57,7 +57,7 @@ export const patchSprintIdSchema = Joi.object({
 });
 
 const changeTitleSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().min(2).max(64).required(),
 });
 
 const router = Router();

@@ -49,6 +49,7 @@ export interface ITask extends Document {
   title: string;
   hoursPlanned: number;
   hoursWasted: number;
+  isDone: boolean;
   hoursWastedPerDay: { currentDay: string; singleHoursWasted: number }[];
 }
 
@@ -59,4 +60,8 @@ export interface ISession extends Document {
 export interface IJWTPayload {
   uid: MongoDBObjectId;
   sid: MongoDBObjectId;
+}
+
+export interface IJWTResetPayload {
+  email: string
 }

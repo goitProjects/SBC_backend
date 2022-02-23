@@ -9,6 +9,7 @@ import projectRouter from "../REST-entities/project/project.router";
 import sprintRouter from "../REST-entities/sprint/sprint.router";
 import taskRouter from "../REST-entities/task/task.router";
 const swaggerDocument = require("../../swagger.json");
+const sgMail = require('@sendgrid/mail');
 
 export default class Server {
   app: Application;
@@ -35,6 +36,8 @@ export default class Server {
   private initMiddlewares() {
     this.app.use(express.json());
     this.app.use(cors({ origin: process.env.ALLOWED_ORIGIN }));
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   }
 
   private async initDbConnection() {

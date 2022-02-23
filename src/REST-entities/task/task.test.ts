@@ -127,6 +127,7 @@ describe("Task router test suite", () => {
             { currentDay: "2020-12-30", singleHoursWasted: 0 },
             { currentDay: "2020-12-31", singleHoursWasted: 0 },
           ],
+          isDone: false,
           id: (createdTask as ITask)._id.toString(),
         });
       });
@@ -277,6 +278,7 @@ describe("Task router test suite", () => {
               { currentDay: "2020-12-30", singleHoursWasted: 0 },
               { currentDay: "2020-12-31", singleHoursWasted: 0 },
             ],
+            isDone: false,
             _id: (createdTask as ITask)._id.toString(),
             __v: 0,
           },
@@ -310,6 +312,7 @@ describe("Task router test suite", () => {
               { currentDay: "2020-12-30", singleHoursWasted: 0 },
               { currentDay: "2020-12-31", singleHoursWasted: 0 },
             ],
+            isDone: false,
             _id: (createdTask as ITask)._id.toString(),
             __v: 0,
           },
@@ -323,7 +326,7 @@ describe("Task router test suite", () => {
           .get(
             `/task/${
               (createdSprint as ISprint)._id
-            }?search=${encodeURIComponent("Q")}`
+            }?search=${encodeURIComponent("Qq")}`
           )
           .set("Authorization", `Bearer ${accessToken}`);
       });
@@ -435,6 +438,7 @@ describe("Task router test suite", () => {
               { currentDay: "2020-12-30", singleHoursWasted: 0 },
               { currentDay: "2020-12-31", singleHoursWasted: 0 },
             ],
+            isDone: false,
             _id: (createdTask as ITask)._id.toString(),
             __v: 0,
           },

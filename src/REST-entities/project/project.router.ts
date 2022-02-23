@@ -13,16 +13,16 @@ import {
 import { addSprintIdSchema } from "../sprint/sprint.router";
 
 const addProjectSchema = Joi.object({
-  title: Joi.string().required(),
-  description: Joi.string().required(),
+  title: Joi.string().min(2).max(64).required(),
+  description: Joi.string().min(2).max(500).required(),
 });
 
 const addContributorSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().min(3).max(254).required(),
 });
 
 const changeTitleSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().min(2).max(64).required(),
 });
 
 const router = Router();

@@ -5,12 +5,14 @@ import {
   ISession,
   IJWTPayload,
   IUserPopulated,
+  IJWTResetPayload
 } from "../helpers/typescript-helpers/interfaces";
 import UserModel from "../REST-entities/user/user.model";
 import SessionModel from "../REST-entities/session/session.model";
 import ProjectModel from "../REST-entities/project/project.model";
 import SprintModel from "../REST-entities/sprint/sprint.model";
 import TaskModel from "../REST-entities/task/task.model";
+const sgMail = require('@sendgrid/mail');
 
 export const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -56,14 +58,14 @@ export const login = async (
   });
   const accessToken = jwt.sign(
     { uid: user._id, sid: newSession._id },
-    process.env.JWT_SECRET as string,
+    process.env.JWT_ACCESS_SECRET as string,
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRE_TIME,
     }
   );
   const refreshToken = jwt.sign(
     { uid: user._id, sid: newSession._id },
-    process.env.JWT_SECRET as string,
+    process.env.JWT_REFRESH_SECRET as string,
     {
       expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME,
     }
@@ -110,7 +112,7 @@ export const authorize = async (
     const accessToken = authorizationHeader.replace("Bearer ", "");
     let payload: string | object;
     try {
-      payload = jwt.verify(accessToken, process.env.JWT_SECRET as string);
+      payload = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string);
     } catch (err) {
       return res.status(401).send({ message: "Unauthorized" });
     }
@@ -138,7 +140,7 @@ export const refreshTokens = async (req: Request, res: Response) => {
     const reqRefreshToken = authorizationHeader.replace("Bearer ", "");
     let payload: string | object;
     try {
-      payload = jwt.verify(reqRefreshToken, process.env.JWT_SECRET as string);
+      payload = jwt.verify(reqRefreshToken, process.env.JWT_REFRESH_SECRET as string);
     } catch (err) {
       await SessionModel.findByIdAndDelete(req.body.sid);
       return res.status(401).send({ message: "Unauthorized" });
@@ -157,14 +159,14 @@ export const refreshTokens = async (req: Request, res: Response) => {
     });
     const newAccessToken = jwt.sign(
       { uid: user._id, sid: newSession._id },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_ACCESS_SECRET as string,
       {
         expiresIn: process.env.JWT_ACCESS_EXPIRE_TIME,
       }
     );
     const newRefreshToken = jwt.sign(
       { uid: user._id, sid: newSession._id },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_REFRESH_SECRET as string,
       { expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME }
     );
     return res
@@ -177,7 +179,61 @@ export const refreshTokens = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   const currentSession = req.session;
   await SessionModel.deleteOne({ _id: (currentSession as ISession)._id });
-  req.user = null;
-  req.session = null;
   return res.status(204).end();
 };
+
+export const requestPasswordReset = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const URL = `${req.protocol}://${req.get("host")}`;
+  const token = jwt.sign(
+    { email },
+    process.env.JWT_RESET_SECRET as string,
+    {
+      expiresIn: process.env.JWT_RESET_EXPIRE_TIME,
+    }
+  );
+
+  const msg = {
+    to: email,
+    from: process.env.SENDGRID_SENDER_EMAIL,
+    subject: 'Password reset',
+    text: "Password reset has been requested\n" +
+    "If you haven't requested password reset, simply ignore this mail.\n\n" +
+    `To reset your password, click the following link: ${URL}/password/reset/?token=${token}`,
+  }
+
+  sgMail
+    .send(msg)
+    .catch((error: any) => {
+      console.error(error)
+    });
+
+  return res.status(204).end();  
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const token = req.body.token;
+  const password = req.body.password;
+  
+  let payload: string | object;
+  
+  try {
+    payload = jwt.verify(token, process.env.JWT_RESET_SECRET as string);
+  } catch (err) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+
+  const user = await UserModel.findById((payload as IJWTResetPayload).email);
+  
+  if (!user) {
+    return res.status(404).send({ message: "User not found" })
+  }
+
+  user.passwordHash = await bcrypt.hash(
+    password,
+    Number(process.env.HASH_POWER)
+  );
+  user.save();
+
+  return res.status(204).end();  
+}

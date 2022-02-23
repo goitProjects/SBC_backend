@@ -5,6 +5,7 @@ const taskSchema = new Schema({
   title: String,
   hoursPlanned: Number,
   hoursWasted: Number,
+  isDone: Boolean,
   hoursWastedPerDay: [
     { currentDay: String, singleHoursWasted: Number, _id: false },
   ],
