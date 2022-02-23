@@ -62,7 +62,7 @@ router.post(
   validate(refreshTokensSchema),
   tryCatchWrapper(refreshTokens)
 );
-router.get(
+router.post(
   "/password/requestReset",
   validate(requestPasswordResetSchema),
   tryCatchWrapper(requestPasswordReset)
