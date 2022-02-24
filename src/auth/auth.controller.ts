@@ -5,7 +5,8 @@ import {
   ISession,
   IJWTPayload,
   IUserPopulated,
-  IJWTResetPayload
+  IJWTResetPayload,
+  IUser
 } from "../helpers/typescript-helpers/interfaces";
 import UserModel from "../REST-entities/user/user.model";
 import SessionModel from "../REST-entities/session/session.model";
@@ -213,7 +214,7 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
   const token = req.body.token;
-  const password = req.body.password;
+  const password = req.body.newPassword;
   
   let payload: string | object;
   
@@ -223,7 +224,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(401).send({ message: "Unauthorized" });
   }
 
-  const user = await UserModel.findById((payload as IJWTResetPayload).email);
+  const user = await UserModel.findOne({ email: (payload as IJWTResetPayload).email });
   
   if (!user) {
     return res.status(404).send({ message: "User not found" })
@@ -233,7 +234,8 @@ export const resetPassword = async (req: Request, res: Response) => {
     password,
     Number(process.env.HASH_POWER)
   );
-  user.save();
+
+  (user as IUser).save();
 
   return res.status(204).end();  
 }

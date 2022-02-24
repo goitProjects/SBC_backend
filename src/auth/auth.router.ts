@@ -40,7 +40,7 @@ const requestPasswordResetSchema = Joi.object({
 const resetPasswordSchema = Joi.object({
   token: Joi.string()
     .custom((value, helpers) => {
-      const isValidToken = jwt.verify(value, process.env.JWT_ACCESS_SECRET as string);
+      const isValidToken = jwt.verify(value, process.env.JWT_RESET_SECRET as string);
       if (!isValidToken) {
         return helpers.message({
           custom: "Invalid 'token'. Must be a valid JWT token",
