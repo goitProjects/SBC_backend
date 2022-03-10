@@ -185,7 +185,7 @@ export const logout = async (req: Request, res: Response) => {
 
 export const requestPasswordReset = async (req: Request, res: Response) => {
   const email = req.body.email;
-  const URL = `${req.protocol}://${req.get("host")}`;
+  const URL = req.headers.origin;
   const token = jwt.sign(
     { email },
     process.env.JWT_RESET_SECRET as string,
