@@ -62,7 +62,7 @@ node("nodejs"){
 
         if (success) {
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                sh "npm i && npm i -g typescript && tsc"
+                sh "npm i"
             }
         }
     }
