@@ -5,10 +5,14 @@ const taskSchema = new Schema({
   title: String,
   hoursPlanned: Number,
   hoursWasted: Number,
-  isDone: Boolean,
+  // isDone: Boolean,
   hoursWastedPerDay: [
     { currentDay: String, singleHoursWasted: Number, _id: false },
   ],
+  status: {
+    isDone: Boolean,
+    finishDate: String
+  },
 });
 
 export default mongoose.model<ITask>("Task", taskSchema);

@@ -148,11 +148,14 @@ export const deleteTask = async (req: Request, res: Response) => {
 
 export const changeTaskFlag = async (req: Request, res: Response) => {
   const { taskId } = req.params;
-  const task = await TaskModel.findById(taskId);
+  let task = await TaskModel.findById(taskId);
   if (!task) {
     return res.status(404).send({ message: "Task not found" });
   }
-  task.isDone = !task.isDone;
-  task.save();
-  res.status(200).send(task);
+  if(task.status.isDone===false) { 
+    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:!task.status.isDone, finishDate: new Date().toISOString().slice(0, 10)}});
+   } else { 
+    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:task.status.isDone,finishDate: null}});
+   } 
+   return res.status(200).send(task);
 }

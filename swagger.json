@@ -799,7 +799,7 @@
     "/task/changeStatus/{taskId}": {
       "patch": {
         "tags": ["Task"],
-        "summary": "Switch task's isDone flag",
+        "summary": "Switch task's isDone flag and update finish day",
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
@@ -1382,10 +1382,21 @@
               }
             }
           },
-          "isDone": {
-            "type": "boolean",
-            "description": "Task's completeness flag"
-          },
+          "status": {
+            "type": "object",
+            "description": "status object",
+            "properties": {
+              "isDone": {
+                "type": "boolean",
+                "description": "Task's completeness flag"
+              },
+              "finishDate": {
+                "type": "string",
+                "description": "Day of finish",
+                "example": "2020-12-31"
+              }
+            }
+          },         
           "id": {
             "type": "string",
             "description": "Task's id",
@@ -1433,10 +1444,21 @@
                 }
               }
             },
-            "isDone": {
-              "type": "boolean",
-              "description": "Task's completeness flag"
-            },
+            "status": {
+              "type": "object",
+              "description": "status object",
+              "properties": {
+                "isDone": {
+                  "type": "boolean",
+                  "description": "Task's completeness flag"
+                },
+                "finishDate": {
+                  "type": "string",
+                  "description": "Day of finish",
+                  "example": "2020-12-31"
+                }
+              }
+            },   
             "_id": {
               "type": "string",
               "description": "Task's id",

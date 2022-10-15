@@ -49,8 +49,9 @@ export interface ITask extends Document {
   title: string;
   hoursPlanned: number;
   hoursWasted: number;
-  isDone: boolean;
+  // isDone: boolean;
   hoursWastedPerDay: { currentDay: string; singleHoursWasted: number }[];
+  status: { isDone: boolean; finishDate: string | null }
 }
 
 export interface ISession extends Document {
