@@ -1455,7 +1455,7 @@
                 "finishDate": {
                   "type": "string",
                   "description": "Day of finish",
-                  "example": "2020-12-31"
+                  "example": "2020-12-10"
                 }
               }
             },   
