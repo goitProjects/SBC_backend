@@ -55,7 +55,7 @@ export const addTask = async (req: Request, res: Response) => {
     hoursPlanned,
     hoursWasted: 0,
     id: task._id,
-    isDone: false,
+    status: task.status,
     hoursWastedPerDay,
   });
 };
