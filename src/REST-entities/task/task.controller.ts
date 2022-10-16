@@ -156,9 +156,9 @@ export const changeTaskFlag = async (req: Request, res: Response) => {
     return res.status(404).send({ message: "Task not found" });
   }
   if(task.status.isDone===false) { 
-    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:!task.status.isDone, finishDate: new Date().toISOString().slice(0, 10)}});
+    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:!task.status.isDone, finishDate: new Date().toISOString().slice(0, 10)}}, {new: true});
    } else { 
-    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:task.status.isDone,finishDate: null}});
+    task= await TaskModel.findByIdAndUpdate(taskId, {status:{isDone:task.status.isDone,finishDate: null}}, {new: true});
    } 
    return res.status(200).send(task);
 }
