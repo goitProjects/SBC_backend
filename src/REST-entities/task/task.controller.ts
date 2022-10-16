@@ -41,11 +41,7 @@ export const addTask = async (req: Request, res: Response) => {
   const task = await TaskModel.create({
     title,
     hoursPlanned,
-    hoursWasted: 0,
-    status: {
-      isDone: true,
-      finishDate: new Date().toISOString().slice(0, 10)
-    },
+    hoursWasted: 0,   
     hoursWastedPerDay,
   });
   (sprint as ISprintPopulated).tasks.push(task);

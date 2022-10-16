@@ -10,8 +10,10 @@ const taskSchema = new Schema({
     { currentDay: String, singleHoursWasted: Number, _id: false },
   ],
   status: {
-    isDone: Boolean,
-    finishDate: String
+    isDone: {
+     type: Boolean, default: false},
+    finishDate: {
+      type: String, default: null}
   },
 });
 
