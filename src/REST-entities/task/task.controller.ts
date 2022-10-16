@@ -42,7 +42,10 @@ export const addTask = async (req: Request, res: Response) => {
     title,
     hoursPlanned,
     hoursWasted: 0,
-    isDone: false,
+    status: {
+      isDone: true,
+      finishDate: new Date().toISOString().slice(0, 10)
+    },
     hoursWastedPerDay,
   });
   (sprint as ISprintPopulated).tasks.push(task);
